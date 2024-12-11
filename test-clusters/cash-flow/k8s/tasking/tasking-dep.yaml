@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasking
+  namespace: cash-flow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasking
+  template:
+    metadata:
+      labels:
+        app: tasking
+    spec:
+      containers:
+        - name: tasking
+          image: johndurkin/cash-flow:tasking-v1.0.0
+          imagePullPolicy: Always
+          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: tasking-config            
+          readinessProbe:
+            httpGet:
+              path: /internal/v1/tasks/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      imagePullSecrets:
+        - name: myregistrykey
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tasking-hpa
+  namespace: cash-flow
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tasking
+  minReplicas: 1  
+  maxReplicas: 5  
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu  
+        target:
+          type: Utilization
+          averageUtilization: 50          

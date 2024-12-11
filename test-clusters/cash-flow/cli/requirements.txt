@@ -1,0 +1,5 @@
+click==8.1.7
+python-dotenv==1.0.1
+requests
+rich
+Faker==29.0.0

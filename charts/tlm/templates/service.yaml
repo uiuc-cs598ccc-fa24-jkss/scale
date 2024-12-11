@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tlm-service
+  labels:
+    app: tlm-service
+spec:
+  selector:
+    app: tlm-service
+  ports:
+  - name: trace-grpc
+    protocol: TCP
+    port: {{ .Values.service.port.traceGrpc }}
+    targetPort: {{ .Values.service.port.traceGrpc }}
+  - name: log-grpc
+    protocol: TCP
+    port: {{ .Values.service.port.logGrpc }}
+    targetPort: {{ .Values.service.port.logGrpc }}
+  - name: metric-grpc
+    protocol: TCP
+    port: {{ .Values.service.port.metricGrpc }}
+    targetPort: {{ .Values.service.port.metricGrpc }}
+  type: {{ .Values.service.type }}

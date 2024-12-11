@@ -1,0 +1,32 @@
+properties:
+  grant_type:
+    type: string
+    enum:
+      - password
+    title: Grant Type
+  username:
+    type: string
+    title: Username
+  password:
+    type: string
+    title: Password
+  scope:
+    type: string
+    title: Scope
+    default: ''
+  client_id:
+    anyOf:
+      - type: string
+      - type: 'null'
+    title: Client Id
+  client_secret:
+    anyOf:
+      - type: string
+      - type: 'null'
+    title: Client Secret
+type: object
+required:
+  - username
+  - password
+  - grant_type  # Include grant_type as a required field
+title: Body_login_for_access_token_api_auth_token_post

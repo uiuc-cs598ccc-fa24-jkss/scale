@@ -1,0 +1,174 @@
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    networks:
+      - cash-flow
+
+  celery-worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.celery
+    image: ${DOCKER_REPO}:${CELERY_DOCKER_TAG}-${CELERY_VERSION}
+    command: celery -A celery_config worker --loglevel=debug
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - DMS_API_URL=${DMS_API_URL}
+      - OTEL_COLLECTOR_ENDPOINT=${OTEL_COLLECTOR_ENDPOINT}
+    networks:
+      - cash-flow
+
+  user-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${USER_DB_DB}
+      POSTGRES_USER: ${USER_DB_USER}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    ports:
+      - ${USER_DB_HOST_PORT}:${USER_DB_PORT}
+    networks:
+      - cash-flow
+
+  tx-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${TX_DB_DB}
+      POSTGRES_USER: ${TX_DB_USER}
+      POSTGRES_PASSWORD: ${TX_DB_PASSWORD}
+    volumes:
+      - tx_db_data:/var/lib/postgresql/data
+    ports:
+      - ${TX_DB_HOST_PORT}:${TX_DB_PORT}
+    networks:
+      - cash-flow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${TX_DB_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s    
+
+  tasking:
+    build:
+      context: .
+      dockerfile: services/tasking/Dockerfile
+    image: ${DOCKER_REPO}:${TASKING_DOCKER_TAG}-${TASKING_VERSION}
+    ports:
+      - ${TASKING_HOST_PORT}:${TASKING_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${TASKING_CONTAINER_PORT}
+    environment:
+      - OTEL_COLLECTOR_ENDPOINT=${OTEL_COLLECTOR_ENDPOINT}
+    networks:
+      - cash-flow
+
+  dms:
+    build: 
+      context: .
+      dockerfile: services/dms/Dockerfile
+    image: ${DOCKER_REPO}:${DMS_DOCKER_TAG}-${DMS_VERSION}
+    depends_on:
+      tx-db:
+        condition: service_healthy      
+    ports:
+      - ${DMS_HOST_PORT}:${DMS_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${DMS_CONTAINER_PORT}
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - TX_DB_HOST=${TX_DB_HOST}
+      - TX_DB_HOST_PORT=${TX_DB_HOST_PORT}
+      - TX_DB_PORT=${TX_DB_PORT}
+      - TX_DB_DB=${TX_DB_DB}
+      - TX_DB_USER=${TX_DB_USER}
+      - TX_DB_PASSWORD=${TX_DB_PASSWORD}    
+      - OTEL_COLLECTOR_ENDPOINT=${OTEL_COLLECTOR_ENDPOINT}
+    networks:
+      - cash-flow
+
+  registration:
+    build:
+      context: .
+      dockerfile: services/registration/Dockerfile
+    image: ${DOCKER_REPO}:${REGISTRATION_DOCKER_TAG}-${REGISTRATION_VERSION}
+    ports:
+      - ${REGISTRATION_HOST_PORT}:${REGISTRATION_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${REGISTRATION_CONTAINER_PORT}
+    depends_on:
+      - auth
+    environment:
+      AUTH_API_URL: ${AUTH_API_URL}
+      TASKING_API_URL: ${TASKING_API_URL}
+      OTEL_COLLECTOR_ENDPOINT: ${OTEL_COLLECTOR_ENDPOINT}
+    networks:
+      - cash-flow
+    
+  transaction:
+    build:
+      context: .
+      dockerfile: services/transaction/Dockerfile
+    image: ${DOCKER_REPO}:${TRANSACTION_DOCKER_TAG}-${TRANSACTION_VERSION}
+    ports:
+      - ${TRANSACTION_HOST_PORT}:${TRANSACTION_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${TRANSACTION_CONTAINER_PORT}
+    depends_on:
+      - tx-db    
+    environment:
+      - AUTH_API_URL=${AUTH_API_URL}
+      - DMS_API_URL=${DMS_API_URL}
+      - TASKING_API_URL=${TASKING_API_URL}
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - OTEL_COLLECTOR_ENDPOINT=${OTEL_COLLECTOR_ENDPOINT}
+    networks:
+      - cash-flow
+
+  auth:
+    build:
+      context: .
+      dockerfile: services/auth/Dockerfile
+    image: ${DOCKER_REPO}:${AUTH_DOCKER_TAG}-${AUTH_VERSION} 
+    ports:
+      - ${AUTH_HOST_PORT}:${AUTH_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${AUTH_CONTAINER_PORT}
+    depends_on:
+      - user-db
+    environment:
+      - DMS_API_URL=${DMS_API_URL}
+      - TASKING_API_URL=${TASKING_API_URL}
+      - USER_DB_HOST=${USER_DB_HOST}
+      - USER_DB_HOST_PORT=${USER_DB_HOST_PORT}
+      - USER_DB_PORT=${USER_DB_PORT}
+      - USER_DB_DB=${USER_DB_DB}
+      - USER_DB_USER=${USER_DB_USER}
+      - USER_DB_PASSWORD=${USER_DB_PASSWORD}          
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - OTEL_COLLECTOR_ENDPOINT=${OTEL_COLLECTOR_ENDPOINT}
+
+    networks:
+      - cash-flow
+
+  notification:
+    build:
+      context: .
+      dockerfile: services/notification/Dockerfile
+    image: ${DOCKER_REPO}:${NOTIF_DOCKER_TAG}-${NOTIF_VERSION} 
+    ports:
+      - ${NOTIF_HOST_PORT}:${NOTIF_CONTAINER_PORT}
+    command: uvicorn main:app --host 0.0.0.0 --port ${NOTIF_CONTAINER_PORT}
+    networks:
+      - cash-flow      
+
+networks:
+  cash-flow:
+    driver: bridge
+    name: ${NETWORK_NAME:-cash-flow}
+
+volumes:
+  user_db_data:
+  tx_db_data:

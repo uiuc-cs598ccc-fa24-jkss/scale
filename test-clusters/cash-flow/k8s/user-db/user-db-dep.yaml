@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-db-dep
+  namespace: cash-flow
+spec:
+  selector: 
+    matchLabels:
+      app: user-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: user-db-config
+            - secretRef:
+                name: user-db-secret
+          volumeMounts:
+            - name: user-db-storage
+              mountPath: /var/lib/user-db/data
+      volumes:
+        - name: user-db-storage
+          persistentVolumeClaim:
+            claimName: user-db-pvc

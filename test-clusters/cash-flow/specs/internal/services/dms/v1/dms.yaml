@@ -1,0 +1,185 @@
+openapi: 3.1.0
+info:
+  title: dms #Data Management Service API
+  version: 1.0.0
+  description: API for managing users and transactions in the data layer.
+
+servers:
+  - url: /internal/v1/data
+    description: Data Management Service Base URL
+
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '200':
+          description: The created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    
+  /users/username/{username}:
+    get:
+      summary: Get user by username
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The user with the specified username
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    
+  /users/email/{email}:
+    get:
+      summary: Get user by email
+      operationId: getUserByEmail
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The user with the specified email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+  /transactions:
+    get:
+      summary: Get a list of transactions for a specific user
+      operationId: getTransactions
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID of the user to filter transactions
+        - name: skip
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Number of items to skip
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Maximum number of items to return
+      responses:
+        '200':
+          description: A list of transactions for the specified user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionBase'
+
+    post:
+      summary: Create a new transaction
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCreate'
+      responses:
+        '200':
+          description: The created transaction
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 123  # Example of a transaction ID            
+              # schema:
+              #   $ref: '#/components/schemas/Transaction'
+
+  /transactions/bulk:
+    post:
+      summary: Add multiple transactions
+      operationId: addTransactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionCreate'
+      responses:
+        '200':
+          description: The list of created transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+  /transactions/{transaction_id}:
+    get:
+      summary: Get a transaction by ID
+      operationId: getTransaction
+      parameters:
+        - name: transaction_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The transaction with the specified ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+
+  /health:
+    $ref: ../../../../api/v1/paths/health/health.yaml
+    
+components:
+  schemas:
+    UserCreate:
+      $ref: ../../../../api/v1/components/schemas/UserCreate.yaml
+
+    User:
+      $ref: ../../../../api/v1/components/schemas/User.yaml
+
+    TransactionBase:
+      $ref: ../../../../api/v1/components/schemas/TransactionBase.yaml
+
+    Transaction:
+      $ref: ../../../../api/v1/components/schemas/Transaction.yaml
+
+    TransactionCreate:
+      $ref: ../../../../api/v1/components/schemas/TransactionCreate.yaml

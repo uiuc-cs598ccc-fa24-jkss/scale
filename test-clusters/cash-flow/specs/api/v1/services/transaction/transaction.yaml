@@ -1,0 +1,27 @@
+openapi: 3.1.0
+info:
+  title: transaction #Transactions Service API
+  version: 0.1.0
+  description: API for managing user transactions
+
+servers:
+  - url: /api/v1/transactions
+    description: Transactions Service Base URL
+
+paths:
+  /:
+    $ref: ../../paths/transactions/transactions.yaml
+  /bulk:
+    $ref: ../../paths/transactions/bulk.yaml
+  /{transaction_id}:
+    $ref: ../../paths/transactions/transaction_id.yaml
+  /health:
+    $ref: ../../paths/health/health.yaml
+components:
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token

@@ -1,0 +1,41 @@
+# Start from an official Python 3.9 image
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Set the working directory in the container
+WORKDIR /app
+
+RUN PYTHONPATH=$(find /app/interfaces -type d | tr '\n' ':') && \
+    export PYTHONPATH=$PYTHONPATH:/app:$PYTHONPATH
+RUN PYTHONPATH=$(find /app/cli -type d | tr '\n' ':') && \
+    export PYTHONPATH=$PYTHONPATH:/app:$PYTHONPATH
+    
+# Upgrade pip
+RUN pip install --upgrade pip
+
+# Copy the requirements file to the working directory
+COPY cli/requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/backend-requirements.txt
+
+# Install the Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r backend-requirements.txt
+
+# Copy the CLI files and internal interfaces
+COPY cli/ /app/cli/
+COPY backend/interfaces/internal/dms/ /app/backend/interfaces/internal/dms/
+COPY backend/interfaces/internal/tasking/ /app/backend/interfaces/internal/tasking/
+COPY backend/interfaces/internal/auth/ /app/backend/interfaces/internal/auth/
+COPY backend/interfaces/internal/registration/ /app/backend/interfaces/internal/registration/
+
+# Install the CLI tool in editable mode
+WORKDIR /app/cli
+RUN pip install -e .
+
+WORKDIR /app
+
+# Expose the port the app runs on
+EXPOSE 8000

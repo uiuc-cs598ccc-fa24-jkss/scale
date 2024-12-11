@@ -1,0 +1,13 @@
+type: object
+title: ValidationRequest
+description: Model for validating a user.
+properties:
+  id: 
+    type: integer
+    title: User ID
+  username:
+    type: string
+    title: Username
+  email:
+    type: string
+    title: Email

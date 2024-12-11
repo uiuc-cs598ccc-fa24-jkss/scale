@@ -1,0 +1,18 @@
+properties:
+  username:
+    type: string
+    title: Username
+  email:
+    anyOf:
+      - type: string
+      - type: 'null'
+    title: Email
+  password:
+    type: string
+    title: Password
+type: object
+required:
+  - username
+  - password
+title: UserCreate
+description: Model for creating a new user.

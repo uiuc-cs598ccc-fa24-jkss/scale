@@ -1,0 +1,9 @@
+properties:
+  message:
+    type: string
+    title: Message
+type: object
+required:
+  - message
+title: TaskResponse
+description: Model for a task response.

@@ -1,0 +1,54 @@
+services:
+  otel-collector:
+    image: ${OTEL_COLLECTOR_IMAGE}
+    volumes:
+      - ./specs/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317"  # gRPC for OTLP
+    depends_on:
+      - tempo
+    networks:
+      - monitoring-network
+
+  tempo:
+    image: ${TEMPO_IMAGE}
+    user: "0"
+    ports:
+      - "3200"
+      - "4317"
+    volumes:
+      - ${LOCAL_DATA}/tempo-data:/tmp/tempo
+      - ./specs/tempo/tempo.yaml:/etc/tempo.yaml      
+    command: ["-config.file=/etc/tempo.yaml"]
+    networks:
+       - monitoring-network
+
+  grafana:
+    image: ${GRAFANA_IMAGE}
+    user: "0"
+    ports:
+      - "3000:3000"  # Grafana UI
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+      # - GF_SECURITY_ADMIN_USER=admin
+      # - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./specs/grafana/grafana.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ${LOCAL_DATA}/grafana-data:/var/lib/grafana
+    depends_on:
+      - tempo      
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    external: true
+    name: ${NETWORK_NAME:-monitoring-network}
+
+volumes:
+  tempo-data:
+  grafana-data:

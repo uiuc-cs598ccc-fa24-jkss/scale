@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cli
+  namespace: cash-flow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cli
+  template:
+    metadata:
+      labels:
+        app: cli
+    spec:
+      containers:
+        - name: dms
+          image: johndurkin/cash-flow:cli-v1.0.0
+          imagePullPolicy: Always
+          command: ["tail", "-f", "/dev/null"]
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: cli-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cli-config
+  namespace: cash-flow
+data:
+  REDIS_URL: "redis://redis:6379/0"
+  AUTH_API_URL: "http://auth:8080"
+  TASKING_API_URL: "http://tasking:8080"
+  DMS_API_URL: "http://dms:8080"
+  REGISTRATION_API_URL: "http://registration:8080"
+  TRANSACTION_API_URL: "http://transaction:8080"
+  # AUTH_API_URL: "http://auth:8080/api/v1/auth"
+  # TASKING_API_URL: "http://tasking:8080/internal/v1/tasks"
+  # DMS_API_URL: "http://dms:8080/internal/v1/data"
+  # REGISTRATION_API_URL: "http://registration:8080/api/v1/registration"
+  # TRANSACTION_API_URL: "http://transaction:8080/api/v1/transactions"
+
+  CLUSTER_ENV: "True"

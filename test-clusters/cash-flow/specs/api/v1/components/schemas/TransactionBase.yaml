@@ -1,0 +1,21 @@
+title: TransactionBase
+description: Model for base transaction fields.
+type: object
+properties:
+  amount:
+    type: number
+    title: Amount
+  category:
+    type: string
+    title: Category
+  description:
+    type: string
+    title: Description
+  date:
+    type: string
+    format: date-time
+    title: Date
+required:
+  - amount
+  - category
+  - date

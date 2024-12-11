@@ -1,0 +1,13 @@
+properties:
+  access_token:
+    type: string
+    title: Access Token
+  token_type:
+    type: string
+    title: Token Type
+type: object
+required:
+  - access_token
+  - token_type
+title: Token
+description: Model for an access token.

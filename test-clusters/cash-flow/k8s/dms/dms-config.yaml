@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dms-config
+  namespace: cash-flow
+data:
+  REDIS_URL: "redis://redis:6379/0"
+  TX_DB_HOST: "tx-db"
+  TX_DB_PORT: "5432"
+  TX_DB_USER: "postgres"
+  TX_DB_DB: "transactions"
+  TX_DB_HOST_PORT: "5433"

@@ -1,0 +1,8 @@
+type: object
+title: ValidationResponse
+description: Response model for user validation.
+properties:
+  exists:
+    type: boolean
+    title: User Exists
+    description: Indicates whether the user exists (true) or not (false).

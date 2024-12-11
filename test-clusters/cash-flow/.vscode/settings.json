@@ -1,0 +1,46 @@
+{
+    "python.envFile": "${workspaceFolder}/.env",
+
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/backend/generated/src",
+        "${workspaceFolder}/backend/services/dms/openapi/src",
+        "${workspaceFolder}/backend/services/tasking/openapi/src",
+        "${workspaceFolder}/backend/services/transaction/openapi/src",
+        "${workspaceFolder}/backend/services/registration/openapi/src",
+        "${workspaceFolder}/backend/services/auth/openapi/src",
+        "${workspaceFolder}/backend/services/notification/openapi/src",
+        "${workspaceFolder}/backend/services/plaid",
+        "${workspaceFolder}/backend/services/plaid/venv/lib",
+        "${workspaceFolder}/services",
+        "${workspaceFolder}/backend",
+        "${workspaceFolder}/backend/interfaces/internal",
+        "${workspaceFolder}/backend/interfaces/internal/dms/",
+        "${workspaceFolder}/backend/interfaces/internal/tasking/",
+        "${workspaceFolder}/backend/interfaces/internal/auth/",
+        "${workspaceFolder}/backend/interfaces/internal/notification/",
+        "${workspaceFolder}/backend/app_logging",
+    ],
+
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/backend/generated/src",
+        "${workspaceFolder}/backend/services/dms/openapi/src",
+        "${workspaceFolder}/backend/services/transaction/openapi/src",
+        "${workspaceFolder}/backend/services/registration/openapi/src",
+        "${workspaceFolder}/backend/services/auth/openapi/src",
+        "${workspaceFolder}/backend/services/notification/openapi/src",
+        "${workspaceFolder}/backend/services/tasking/openapi/src",
+        "${workspaceFolder}/services",
+        "${workspaceFolder}/backend",
+        "${workspaceFolder}/backend/interfaces/internal/dms/",
+        "${workspaceFolder}/backend/interfaces/internal/tasking/",
+        "${workspaceFolder}/backend/interfaces/internal/notification/",
+        "${workspaceFolder}/backend/app_logging",
+    ],
+
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true
+    }
+
+}

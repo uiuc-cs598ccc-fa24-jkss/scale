@@ -1,0 +1,59 @@
+# coding: utf-8
+
+{{>partial_header}}
+
+from fastapi import FastAPI
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry import trace
+
+import os
+
+{{#apiInfo}}
+{{#apis}}
+from {{apiPackage}}.{{classFilename}} import router as {{classname}}Router
+{{/apis}}
+{{/apiInfo}}
+
+# Set up OpenTelemetry Tracer and Exporter
+def configure_tracing(app):
+    # Create the OTLP exporter to send traces to the OpenTelemetry Collector
+    resource = Resource(attributes={
+        SERVICE_NAME: "{{appName}}"
+    })
+
+    endpoint = os.getenv("OTEL_COLLECTOR_ENDPOINT", "otel-collector:4317")
+
+    # Set up the tracer provider
+    tracer_provider = TracerProvider(resource=resource)
+    trace.set_tracer_provider(tracer_provider)
+
+    # Add a BatchSpanProcessor to process and export spans
+    span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=endpoint, insecure=True))
+    trace.get_tracer_provider().add_span_processor(span_processor)
+
+    # Instrument the FastAPI app and any outgoing HTTP requests via urllib3
+    FastAPIInstrumentor.instrument_app(app)
+    URLLib3Instrumentor().instrument()
+    Psycopg2Instrumentor().instrument()
+
+app = FastAPI(
+    title="{{appName}}",
+    description="{{appDescription}}",
+    version="{{appVersion}}",
+)
+
+# Call the OpenTelemetry tracing configuration
+configure_tracing(app)
+
+{{#apiInfo}}
+{{#apis}}
+app.include_router({{classname}}Router)
+{{/apis}}
+{{/apiInfo}}

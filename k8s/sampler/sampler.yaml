@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sampler
+  labels:
+    app: sampler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sampler
+  template:
+    metadata:
+      labels:
+        app: sampler
+    spec:
+      containers:
+      - name: sampler
+        image: johndurkin/scale:sampler-v1.0.9
+        ports:
+        - containerPort: 4317 
+        command: ["python", "-u", "main.py", "--train_size=1000"]
+        resources:
+          limits:
+            memory: "2048Mi"
+            cpu: "1000m"
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sampler
+spec:
+  selector:
+    app: sampler
+  ports:
+  - protocol: TCP
+    port: 4317
+    targetPort: 4317

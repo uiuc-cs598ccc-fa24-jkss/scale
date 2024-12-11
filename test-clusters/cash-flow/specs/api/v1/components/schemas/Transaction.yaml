@@ -1,0 +1,18 @@
+Transaction:
+  title: Transaction
+  description: Model for a transaction with an ID.
+  type: object
+  allOf:
+    - $ref: '#/components/schemas/TransactionCreate'
+  properties:
+    id:
+      type: integer
+      title: ID
+  required:
+    - id
+components:
+  schemas:
+    TransactionCreate:
+      $ref: TransactionCreate.yaml
+    TransactionBase:
+      $ref: TransactionBase.yaml

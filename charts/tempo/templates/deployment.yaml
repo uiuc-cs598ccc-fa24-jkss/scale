@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo
+  labels:
+    app: tempo
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: tempo
+  template:
+    metadata:
+      labels:
+        app: tempo
+    spec:
+      initContainers:
+      - name: init-permissions
+        image: busybox
+        command: ['sh', '-c', 'chmod -R 777 /tmp/tempo']
+        volumeMounts:
+        - name: tempo-data
+          mountPath: /tmp/tempo
+      containers:
+      - name: tempo
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        resources:
+          limits:
+            memory: "4Gi"
+        ports:
+        - containerPort: {{ .Values.service.ports.http.port }}
+        - containerPort: {{ .Values.service.ports.grpc.port }}
+        volumeMounts:
+        - name: tempo-data
+          mountPath: /tmp/tempo
+        - name: tempo-config
+          mountPath: /etc/tempo.yaml
+          subPath: tempo.yaml
+        command: ["/tempo", "-config.file=/etc/tempo.yaml"]
+      volumes:
+      - name: tempo-data
+        persistentVolumeClaim:
+          claimName: tempo-pvc
+      - name: tempo-config
+        configMap:
+          name: tempo-config

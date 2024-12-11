@@ -1,0 +1,60 @@
+get:
+  tags:
+    - transactions
+  summary: Read Transaction
+  description: Retrieve a transaction by its ID. Requires a valid JWT token.
+  operationId: get_api_transactions_id
+  security:
+    - OAuth2PasswordBearer: []
+  parameters:
+    - name: transaction_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        title: Transaction Id
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Transaction.yaml
+    '404':
+      description: Not found
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml
+delete:
+  tags:
+    - transactions
+  summary: Delete Transaction
+  description: Delete a transaction by its ID. Requires a valid JWT token.
+  operationId: delete_api_transaction_id
+  security:
+    - OAuth2PasswordBearer: []
+  parameters:
+    - name: transaction_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        title: Transaction Id
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Transaction.yaml
+    '404':
+      description: Not found
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

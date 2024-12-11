@@ -1,0 +1,22 @@
+get:
+  tags:
+    - auth
+  summary: Read Users Me
+  description: |-
+    Retrieve the currently authenticated user.
+
+    Parameters:
+    - current_user: The currently authenticated user.
+
+    Returns:
+    - The current user as a response model.
+  operationId: get_api_auth_me
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/User.yaml
+  security:
+    - OAuth2PasswordBearer: []

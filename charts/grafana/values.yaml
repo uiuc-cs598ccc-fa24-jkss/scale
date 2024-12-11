@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: grafana/grafana
+  tag: "latest"
+  pullPolicy: Always
+
+pvc:
+  storage: 1Gi
+  accessMode: ReadWriteOnce
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 30000
+
+config:
+  datasources:
+    tempoUrl: "http://tempo:3200"
+    orgId: 1
+    access: proxy
+    httpMethod: GET
+    isDefault: true
+    basicAuth: false
+    editable: false
+    uid: tempo
+    version: "1"
+
+env:
+  GF_AUTH_ANONYMOUS_ENABLED: "true"
+  GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+  GF_AUTH_DISABLE_LOGIN_FORM: "true"
+  GF_FEATURE_TOGGLES_ENABLE: "traceqlEditor"

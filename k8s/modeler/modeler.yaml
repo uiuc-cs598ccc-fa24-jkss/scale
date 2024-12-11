@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeler
+  labels:
+    app: modeler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modeler
+  template:
+    metadata:
+      labels:
+        app: modeler
+    spec:
+      containers:
+      - name: modeler
+        image: johndurkin/scale:modeler-v1.0.3
+        ports:
+        - containerPort: 4317 
+        env:
+          - name: TRACE_SAMPLER_CHANNEL
+            value: "sampler:4317"
+          - name: TRACE_BACKEND_URL
+            value: "http://tempo:3299"
+          - name: CONFIG_SPEC_LOC
+            value: "/app/config/specs"
+          - name: TARGET_NAMESPACE
+            value: "default"
+        command: ["python", "main.py"]
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: modeler
+spec:
+  selector:
+    app: modeler
+  ports:
+  - protocol: TCP
+    port: 4317
+    targetPort: 4317
+  type: NodePort

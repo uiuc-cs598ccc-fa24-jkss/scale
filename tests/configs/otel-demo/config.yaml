@@ -1,0 +1,167 @@
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: accountingservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-accountingservice   # Target deployment name for scaling
+    deploymentName: accountingservice   # Target deployment name for scaling
+  latencyThreshold:
+    upperBound: 300ms  # Upper latency threshold to trigger scaling up
+    lowerBound: 100ms  # Lower latency threshold to trigger scaling down
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: adservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-adservice 
+    deploymentName: adservice 
+  latencyThreshold:
+    upperBound: 400ms
+    lowerBound: 150ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: cartservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-cartservice
+    deploymentName: cartservice
+  latencyThreshold:
+    upperBound: 250ms
+    lowerBound: 80ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: checkoutservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-checkoutservice
+    deploymentName: checkoutservice
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: currencyservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-currencyservice 
+    deploymentName: currencyservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: emailservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-emailservice 
+    deploymentName: emailservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: frauddetectionservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-frauddetectionservice 
+    deploymentName: frauddetectionservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: imageprovider-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-imageprovider 
+    deploymentName: imageprovider 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: paymentservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-paymentservice 
+    deploymentName: paymentservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: productcatalogservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-productcatalogservice 
+    deploymentName: productcatalogservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: quoteservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-quoteservice 
+    deploymentName: quoteservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: recommendationservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-recommendationservice 
+    deploymentName: recommendationservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: shippingservice-latency-scaler
+spec:
+  target:
+    serviceName: otel-demo-shippingservice 
+    deploymentName: shippingservice 
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms

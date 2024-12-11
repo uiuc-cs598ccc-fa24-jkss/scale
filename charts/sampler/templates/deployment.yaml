@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sampler
+  labels:
+    app: sampler
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: sampler
+  template:
+    metadata:
+      labels:
+        app: sampler
+    spec:
+      containers:
+      - name: sampler
+        image: "{{ .Values.image.repository }}:{{ .Values.image.name }}-{{ .Values.image.version }}"
+        ports:
+        - containerPort: {{ .Values.service.port }} 
+        command: ["python", "-u", "main.py", "--train_size={{ .Values.trainSize }}"]
+        resources:
+          limits:
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+        imagePullPolicy: Always

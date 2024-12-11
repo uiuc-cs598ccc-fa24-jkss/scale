@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo
+  labels:
+    app: tempo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+  template:
+    metadata:
+      labels:
+        app: tempo
+    spec:
+      initContainers:
+      - name: init-permissions
+        image: busybox
+        command: ['sh', '-c', 'chmod -R 777 /tmp/tempo']
+        volumeMounts:
+        - name: tempo-data
+          mountPath: /tmp/tempo
+      containers:
+      - name: tempo
+        image: grafana/tempo:latest
+        ports:
+        - containerPort: 3200
+        - containerPort: 4317
+        volumeMounts:
+        - name: tempo-data
+          mountPath: /tmp/tempo
+        - name: tempo-config
+          mountPath: /etc/tempo.yaml
+          subPath: tempo.yaml
+        command: ["/tempo", "-config.file=/etc/tempo.yaml"]
+      volumes:
+      - name: tempo-data
+        persistentVolumeClaim:
+          claimName: tempo-pvc
+      - name: tempo-config
+        configMap:
+          name: tempo-config
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tempo-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi          
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo
+  labels:
+    app: tempo
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 3200
+    targetPort: 3200
+    nodePort: 32000
+    name: http
+  - protocol: TCP
+    port: 4317
+    targetPort: 4317
+    nodePort: 32001
+    name: oltp
+  selector:
+    app: tempo

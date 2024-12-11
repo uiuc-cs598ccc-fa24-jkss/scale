@@ -1,0 +1,16 @@
+title: TransactionCreate
+description: Model for creating a new transaction.
+type: object
+allOf:
+  - $ref: '#/components/schemas/TransactionBase'
+properties:
+  account_id:
+    type: integer
+    title: Account ID
+required:
+  - account_id
+
+components:
+  schemas:
+    TransactionBase:
+      $ref: TransactionBase.yaml

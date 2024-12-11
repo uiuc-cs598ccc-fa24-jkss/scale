@@ -1,0 +1,13 @@
+properties:
+  email:
+    type: string
+    format: email
+    title: Email
+  code:
+    type: string
+    title: Code
+type: object
+required:
+  - email
+  - code
+title: CodeVerificationRequest

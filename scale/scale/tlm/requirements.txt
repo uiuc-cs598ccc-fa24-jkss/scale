@@ -1,0 +1,6 @@
+grpcio==1.56.0
+grpcio-tools==1.56.0
+opentelemetry-proto==1.27.0
+protobuf>=4.21.6,<5.0-dev
+pandas
+tabulate

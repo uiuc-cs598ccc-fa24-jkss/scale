@@ -1,0 +1,9 @@
+type: object
+title: CodeVerificationResponse
+description: Response model for code verification.
+properties:
+  valid:
+    type: boolean
+    title: Code Valid
+required:
+  - valid

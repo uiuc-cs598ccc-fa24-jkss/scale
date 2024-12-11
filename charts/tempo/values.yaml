@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: grafana/tempo
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  ports:
+    grpc:
+      name: grpc
+      protocol: TCP
+      port: 4317
+      targetPort: 4317
+    http:
+      name: http
+      protocol: TCP 
+      port: 3200
+      targetPort: 3200
+  type: ClusterIP
+
+pvc:
+  storage: 10Gi
+  accessMode: ReadWriteOnce
+
+config:
+  server:
+    http_listen_port: 3200
+  distributor:
+    otlp_grpc_port: 4317
+  storage:
+    wal_path: /tmp/tempo/wal
+    trace_path: /tmp/tempo/traces
+  compactor:
+    block_retention: 24h 
+  ingester:
+    max_block_duration: 5m

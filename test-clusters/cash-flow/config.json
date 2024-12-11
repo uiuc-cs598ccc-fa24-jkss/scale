@@ -1,0 +1,14 @@
+{
+  "modelPropertyNaming": "original",
+
+  "apiTemplateFiles": {
+    "api_interface.mustache": "I{{classname}}Api.py"
+  },
+
+  "additionalProperties": {
+    "packageName": "server",
+    "reservedWordsMappings": {
+      "date": "date"
+    }
+  }
+}

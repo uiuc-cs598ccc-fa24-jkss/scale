@@ -1,0 +1,119 @@
+openapi: 3.0.0
+info:
+  title: notification #Notification API
+  version: 1.0.0
+  description: API for sending notifications to users
+
+servers:
+  - url: /internal/v1/notification
+    description: Notification Service Base URL
+
+paths:
+  /send_welcome_email_notif:
+    post:
+      summary: Send a welcome email notification
+      operationId: sendWelcomeEmailNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WelcomeEmailNotificationRequest'
+      responses:
+        '200':
+          description: Welcome email notification sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+
+  /send_verify_code_notif:
+    post:
+      summary: Send a verification code notification
+      operationId: sendVerificationCodeNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationCodeNotificationRequest'
+      responses:
+        '200':
+          description: Verification code notification sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+
+  /send_password_reset_notif:
+    post:
+      summary: Send a password reset code notification
+      operationId: sendPasswordResetCodeNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetCodeNotificationRequest'
+      responses:
+        '200':
+          description: Password reset code notification sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResponse'
+
+  /health:
+    $ref: ../../../../api/v1/paths/health/health.yaml
+
+components:
+  schemas:
+    WelcomeEmailNotificationRequest:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          example: user@example.com
+        message:
+          type: string
+          example: "Hello, world!"
+      required:
+        - user_email
+        - user_name
+        - message
+
+    VerificationCodeNotificationRequest:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          example: user@example.com
+        verification_code:
+          type: string
+          example: "123456"
+      required:
+        - user_email
+        - verification_code
+
+    PasswordResetCodeNotificationRequest:
+      type: object
+      properties:
+        user_email:
+          type: string
+          format: email
+          example: user@example.com
+        reset_code:
+          type: string
+          example: "789012"
+      required:
+        - user_email
+        - reset_code
+
+    NotificationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Notification sent to user@example.com"

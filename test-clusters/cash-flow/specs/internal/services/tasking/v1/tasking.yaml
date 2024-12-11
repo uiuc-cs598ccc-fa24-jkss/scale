@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: celery-worker #Celery Task API
+  version: 1.0.0
+  description: API for managing Celery tasks
+
+servers:
+  - url: /internal/v1/tasks
+    description: Celery Task Service Base URL
+
+paths:
+  /send_welcome_email:
+    post:
+      summary: Send a welcome email
+      operationId: sendWelcomeEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+                  format: email
+                  example: user@example.com
+      responses:
+        '200':
+          description: Email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Welcome email sent to user@example.com"
+
+  /send_registration_code_email:
+    post:
+      summary: Send a registration code email
+      operationId: sendRegistrationCodeEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                code:
+                  type: string
+                  example: "123456"
+      responses:
+        '200':
+          description: Email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Registration code sent to user@example.com"
+
+  /process_enrollment:
+    post:
+      summary: Process user enrollment
+      operationId: processEnrollment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_data:
+                  type: object
+                  example:
+                    username: johndoe
+                    email: johndoe@example.com
+                    password: "password"
+      responses:
+        '200':
+          description: Enrollment processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  status:
+                    type: string
+                    example: "success"
+
+  /process_transaction:
+    post:
+      summary: Process a transaction
+      operationId: processTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transaction:
+                  $ref: '#/components/schemas/TransactionCreate'
+      responses:
+        '200':
+          description: Transaction processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+
+  /process_bulk_transactions:
+    post:
+      summary: Process multiple transactions
+      operationId: processBulkTransactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactions_data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/TransactionCreate'
+      responses:
+        '200':
+          description: Transactions processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction_ids:
+                    type: array
+                    items:
+                      type: integer
+                  status:
+                    type: string
+                    example: "success"
+
+  /health:
+    $ref: ../../../../api/v1/paths/health/health.yaml                    
+
+
+components:
+  schemas:
+    TransactionCreate:
+      $ref: ../../../../api/v1/components/schemas/TransactionCreate.yaml

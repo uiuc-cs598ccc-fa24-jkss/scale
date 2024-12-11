@@ -1,0 +1,24 @@
+post:
+  tags:
+    - registration
+  summary: Verify Registration
+  operationId: post_api_registration_verify
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/CodeVerificationRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TaskResponse.yaml
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

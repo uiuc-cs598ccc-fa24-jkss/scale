@@ -1,0 +1,30 @@
+replicaCount: 1
+
+traceSamplerChannel: "sampler:4317"
+
+traceBackendUrl: "http://tempo:3200"
+
+configSpecPath: "/app/config/specs"
+
+configHostPath: "/mnt/config"  
+
+targetNamespace: "default"
+
+configDir: "otel-demo"
+
+image:
+  repository: johndurkin/scale
+  name: "modeler"
+  version: "v1.0.6"
+  pullPolicy: Always
+
+service:
+  type: NodePort
+  port: 4317
+  nodePort: 30555
+
+resources:
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+

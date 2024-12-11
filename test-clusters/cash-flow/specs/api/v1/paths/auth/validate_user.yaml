@@ -1,0 +1,37 @@
+get:
+  tags:
+    - auth
+  summary: Validate a user given any combination of User properties
+  operationId: validateUser
+  parameters:
+    - in: query
+      name: id
+      required: false
+      schema:
+        type: integer
+      description: ID of the user
+    - in: query
+      name: username
+      required: false
+      schema:
+        type: string
+      description: Username of the user
+    - in: query
+      name: email
+      required: false
+      schema:
+        type: string
+      description: Email of the user
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ValidationResponse.yaml
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

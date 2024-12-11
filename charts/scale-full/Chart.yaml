@@ -1,0 +1,21 @@
+apiVersion: v2
+name: scale-stack
+description: An umbrella chart for managing all SCALE services
+version: 0.1.0
+
+dependencies:
+  - name: otel-collector
+    version: "0.1.0"
+    repository: "file://../otel-collector"
+  - name: grafana
+    version: "0.1.0"
+    repository: "file://../grafana"
+  - name: modeler
+    version: "0.1.0"
+    repository: "file://../modeler"
+  - name: sampler
+    version: "0.1.0"
+    repository: "file://../sampler"
+  - name: tempo
+    version: "0.1.0"
+    repository: "file://../tempo"

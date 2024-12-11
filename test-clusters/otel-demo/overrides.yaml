@@ -1,0 +1,72 @@
+default:
+  envOverrides:
+    - name: OTEL_COLLECTOR_NAME
+      value: "otel-collector.monitoring.svc.cluster.local"
+
+# Leaving this in case we want to override specific components
+
+# components:
+#   adService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4318"
+#   accountingService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"        
+#   cartService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   checkoutService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   currencyService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   emailService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317/v1/traces"
+#   frauddetectionService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4318"
+#   frontend:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   imageprovider:
+#     envOverrides:
+#       - name: OTEL_COLLECTOR_HOST
+#         value: "otel-collector.monitoring.svc.cluster.local"
+#   kafka: 
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4318"
+#   loadgenerator:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   paymentService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   productCatalogService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   quoteService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4318"
+#   recommendationService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"
+#   shippingService:
+#     envOverrides:
+#       - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#         value: "http://otel-collector.monitoring.svc.cluster.local:4317"

@@ -1,0 +1,18 @@
+dependencies:
+- name: otel-collector
+  repository: file://../otel-collector
+  version: 0.1.0
+- name: grafana
+  repository: file://../grafana
+  version: 0.1.0
+- name: modeler
+  repository: file://../modeler
+  version: 0.1.0
+- name: sampler
+  repository: file://../sampler
+  version: 0.1.0
+- name: tempo
+  repository: file://../tempo
+  version: 0.1.0
+digest: sha256:174ca0eeb42063ac037244d6a4a5a3e1dd56b3479764d0df298d0a4a11905d5c
+generated: "2024-10-24T23:10:55.825632016-06:00"

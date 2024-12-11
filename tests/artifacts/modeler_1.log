@@ -1,0 +1,22 @@
+2024-11-01 06:54:22,408 - INFO - Service: checkoutservice, Avg. Latency: 181.00045788 is ABOVE the upper bound of 35ms
+2024-11-01 06:54:22,413 - INFO - Service: checkoutservice
+Average latency: 181.00045788
+Overall trend: -7.211364358461546
+Operation averages: {'oteldemo.CartService/GetCart': np.float64(11.083279181818181), 'oteldemo.ProductCatalogService/GetProduct': np.float64(10.23618505882353), 'oteldemo.CurrencyService/Convert': np.float64(42.52950376), 'oteldemo.ShippingService/GetQuote': np.float64(85.4986651818182), 'oteldemo.PaymentService/Charge': np.float64(107.31387163636364), 'oteldemo.ShippingService/ShipOrder': np.float64(1.5356104545454543), 'oteldemo.CartService/EmptyCart': np.float64(81.59711545454546), 'oteldemo.CheckoutService/PlaceOrder': np.float64(680.9611581818182), 'prepareOrderItemsAndShippingQuoteFromCart': np.float64(229.56635745454543), 'orders publish': np.float64(81.43834754545456), 'HTTP POST': np.float64(149.75302245454543)}
+Operation trends: {'oteldemo.CartService/GetCart': np.float64(2.9050141909090907), 'oteldemo.ProductCatalogService/GetProduct': np.float64(2.569322718137254), 'oteldemo.CurrencyService/Convert': np.float64(0.3498748484615382), 'oteldemo.ShippingService/GetQuote': np.float64(-12.885889581818184), 'oteldemo.PaymentService/Charge': np.float64(18.232600009090906), 'oteldemo.ShippingService/ShipOrder': np.float64(-0.07138727272727262), 'oteldemo.CartService/EmptyCart': np.float64(8.552552918181814), 'oteldemo.CheckoutService/PlaceOrder': np.float64(-25.718921899999952), 'prepareOrderItemsAndShippingQuoteFromCart': np.float64(-1.4142766090908994), 'orders publish': np.float64(-23.420187399999985), 'HTTP POST': np.float64(-31.669663436363624)}
+2024-11-01 06:54:22,413 - INFO - Scaling up service: checkoutservice
+2024-11-01 06:54:22,413 - INFO - Service: shippingservice, Latency: 18.273513120000004 is within the bounds of 12ms and 35ms
+2024-11-01 06:54:22,414 - INFO - Service: emailservice, Latency: 11.008496719999998 is BELOW the lower bound of 12ms
+2024-11-01 06:54:22,415 - INFO - Service: emailservice
+Average latency: 11.008496719999998
+Overall trend: 0.21087755769230757
+Operation averages: {'sinatra.render_template': np.float64(5.093454136363637), 'send_email': np.float64(108.8658129090909), 'POST /send_order_confirmation': np.float64(114.88516909090909)}
+Operation trends: {'sinatra.render_template': np.float64(-0.44996358836815364), 'send_email': np.float64(-32.67207560909089), 'POST /send_order_confirmation': np.float64(-32.57978332727271)}
+2024-11-01 06:54:22,415 - INFO - Scaling down service: emailservice
+2024-11-01 06:54:22,415 - INFO - Service: quoteservice, Latency: 3.31879792 is BELOW the lower bound of 12ms
+2024-11-01 06:54:22,417 - INFO - Service: quoteservice
+Average latency: 3.31879792
+Overall trend: 0.1616781784615384
+Operation averages: {'calculate-quote': np.float64(4.197433545454545), '{closure}': np.float64(10.998263363636365), 'POST /getquote': np.float64(15.054922909090907)}
+Operation trends: {'calculate-quote': np.float64(-1.1743879000000006), '{closure}': np.float64(-2.9282003909090877), 'POST /getquote': np.float64(-3.332298409090909)}
+2024-11-01 06:54:22,418 - INFO - Scaling down service: quoteservice

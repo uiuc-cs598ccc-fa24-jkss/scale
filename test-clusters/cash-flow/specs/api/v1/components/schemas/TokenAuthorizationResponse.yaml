@@ -1,0 +1,9 @@
+properties:
+  id:
+    type: integer
+    title: User ID
+type: object
+required:
+  - id
+title: TokenAuthorizationResponse
+description: Model for a Token Authorization Response.

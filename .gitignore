@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__
+.venv/
+.scratch/
+.history
+
+# cash-flow generated files
+/test-clusters/cash-flow/.cli/
+/test-clusters/cash-flow/backend/services/notification/openapi/
+/test-clusters/cash-flow/cli/cash_cli.egg-info/
+/test-clusters/cash-flow/sim_users_*.json
+/test-clusters/cash-flow/templates/services/auth/main.mustache
+
+# don't commit CSVs directly
+/tests/data/spans/*.csv
+/tests/data/results/*.csv
+/tests/data/logs/*.log

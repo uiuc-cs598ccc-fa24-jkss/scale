@@ -1,0 +1,15 @@
+aiohttp
+aioreactive
+grpcio-tools==1.62.3
+grpcio==1.62.3
+numpy
+opentelemetry-proto==1.27.0
+pandas
+protobuf==4.25.5
+reactivex
+river==0.21.2
+scikit_learn
+scikit_learn_extra
+scipy
+tabulate
+tenacity

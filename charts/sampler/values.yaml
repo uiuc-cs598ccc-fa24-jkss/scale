@@ -1,0 +1,19 @@
+replicaCount: 1
+
+trainSize: 1000
+samplerVersion: v2
+
+image:
+  repository: johndurkin/scale
+  name: "sampler"
+  version: "v1.0.9"
+  pullPolicy: Always
+
+service:
+  port: 4317
+
+resources:
+  limits:
+    memory: "2048Mi"
+    cpu: "1000m"
+

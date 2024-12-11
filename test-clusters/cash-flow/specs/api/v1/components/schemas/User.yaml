@@ -1,0 +1,18 @@
+properties:
+  username:
+    type: string
+    title: Username
+  email:
+    anyOf:
+      - type: string
+      - type: 'null'
+    title: Email
+  id:
+    type: integer
+    title: Id
+type: object
+required:
+  - username
+  - id
+title: User
+description: Model for a user with an additional 'id' field.

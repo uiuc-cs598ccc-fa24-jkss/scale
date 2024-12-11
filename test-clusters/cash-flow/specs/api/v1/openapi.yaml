@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /api/auth/register:
+    $ref: paths/api_auth_register.yaml
+  /api/auth/token:
+    $ref: paths/api_auth_token.yaml
+  /api/auth/me:
+    $ref: paths/api_auth_me.yaml
+  /api/health/:
+    $ref: paths/api_health_.yaml
+  /api/transactions/:
+    $ref: paths/api_transactions.yaml
+  /api/transactions/bulk:
+    $ref: paths/api_transactions_bulk.yaml
+  /api/transactions/{transaction_id}:
+    $ref: paths/api_transactions_transaction_id.yaml
+  /api/registration/enroll:
+    $ref: paths/api_registration_enroll.yaml
+  /api/registration/verify:
+    $ref: paths/api_registration_verify.yaml
+components:
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token

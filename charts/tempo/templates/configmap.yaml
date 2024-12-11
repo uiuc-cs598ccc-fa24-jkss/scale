@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-config
+  labels:
+    app: tempo
+data:
+  tempo.yaml: |
+    server:
+      http_listen_port: {{ .Values.config.server.http_listen_port }}
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: "0.0.0.0:{{ .Values.config.distributor.otlp_grpc_port }}"
+    ingester:
+      max_block_duration: {{ .Values.config.ingester.max_block_duration }}
+    compactor:
+      compaction:
+        block_retention: {{ .Values.config.compactor.block_retention }}
+    storage:
+      trace:
+        backend: local
+        wal:
+          path: {{ .Values.config.storage.wal_path }}
+        local:
+          path: {{ .Values.config.storage.trace_path }}

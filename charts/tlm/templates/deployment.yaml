@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tlm-service
+  labels:
+    app: tlm-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: tlm-service
+  template:
+    metadata:
+      labels:
+        app: tlm-service
+    spec:
+      containers:
+      - name: tlm-service
+        image: "{{ .Values.image.repository }}:{{ .Values.image.name }}-{{ .Values.image.version }}"
+        ports:
+        - containerPort: {{ .Values.service.port.traceGrpc }}
+        - containerPort: {{ .Values.service.port.logGrpc }}
+        - containerPort: {{ .Values.service.port.metricGrpc }}
+        command: ["python", "main.py"]
+        resources:
+          limits:
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"

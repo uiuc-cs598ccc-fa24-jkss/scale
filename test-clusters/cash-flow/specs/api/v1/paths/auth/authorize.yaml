@@ -1,0 +1,16 @@
+get:
+  tags:
+    - auth
+  summary: Authorize and retrieve the current user based on the provided token
+  operationId: authorizeToken
+  security:
+    - OAuth2PasswordBearer: []
+  responses:
+    '200':
+      description: Authorized user information
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TokenAuthorizationResponse.yaml
+    '401':
+      description: "Unauthorized or invalid token"    

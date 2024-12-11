@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: johndurkin/scale
+  name: "tlm-service"
+  version: "v1.0.1"
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port:
+    traceGrpc: 4317
+    logGrpc: 4318
+    metricGrpc: 4319
+
+resources:
+  limits:
+    memory: "512Mi"
+    cpu: "500m"

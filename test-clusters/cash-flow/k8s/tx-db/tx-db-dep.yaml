@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tx-db-dep
+  namespace: cash-flow
+spec:
+  selector: 
+    matchLabels:
+      app: tx-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tx-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: tx-db-config
+            - secretRef:
+                name: tx-db-secret
+          volumeMounts:
+            - name: tx-db-storage
+              mountPath: /var/lib/tx-db/data
+      volumes:
+        - name: tx-db-storage
+          persistentVolumeClaim:
+            claimName: tx-db-pvc

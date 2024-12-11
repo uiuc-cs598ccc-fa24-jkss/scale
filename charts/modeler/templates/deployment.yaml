@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeler
+  labels:
+    app: modeler
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: modeler
+  template:
+    metadata:
+      labels:
+        app: modeler
+    spec:
+      containers:
+      - name: modeler
+        image: "{{ .Values.image.repository }}:{{ .Values.image.name }}-{{ .Values.image.version }}"
+        ports:
+        - containerPort: {{ .Values.service.port }} 
+        env:
+          - name: TRACE_SAMPLER_CHANNEL
+            value: {{ .Values.traceSamplerChannel }}
+          - name: TRACE_BACKEND_URL
+            value: {{ .Values.traceBackendUrl }}
+          - name: CONFIG_SPEC_LOC
+            value: {{ .Values.configSpecPath }}            
+          - name: TARGET_NAMESPACE
+            value: {{ .Values.targetNamespace }}
+        command: ["python", "-u", "main.py"]
+        volumeMounts:
+          - name: modeler-config-volume
+            mountPath: {{ .Values.configSpecPath }}
+            readOnly: true
+        resources:
+          limits:
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+        imagePullPolicy: Always
+      volumes:
+        - name: modeler-config-volume
+          hostPath:
+            path: {{ .Values.configHostPath }}/{{ .Values.configDir }}
+            type: Directory

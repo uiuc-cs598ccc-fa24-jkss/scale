@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package scale.sampler;
+
+import "opentelemetry/proto/trace/v1/trace.proto";
+
+message SampleTracesRequest { }
+
+message SampleTracesDataRequest { }
+
+message SampleTracesResponse {
+    string trace_id = 1;
+}
+
+service TraceSampler {
+  rpc SampleTraces(SampleTracesRequest) returns (stream SampleTracesResponse) {}
+  rpc SampleTracesData(SampleTracesDataRequest) returns (stream opentelemetry.proto.trace.v1.TracesData) {}
+}

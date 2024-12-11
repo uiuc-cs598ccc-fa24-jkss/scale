@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tlm-service
+  labels:
+    app: tlm-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tlm-service
+  template:
+    metadata:
+      labels:
+        app: tlm-service
+    spec:
+      containers:
+      - name: tlm-service
+        image: johndurkin/scale:tlm-service-v1.0.1
+        ports:
+        - containerPort: 4317  # Traces gRPC port
+        - containerPort: 4318  # Logs gRPC port
+        - containerPort: 4319  # Metrics gRPC port
+        command: ["python", "main.py"]
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tlm-service
+  labels:
+    app: tlm-service
+spec:
+  selector:
+    app: tlm-service
+  ports:
+  - name: trace-grpc
+    protocol: TCP
+    port: 4317
+    targetPort: 4317
+  - name: log-grpc
+    protocol: TCP
+    port: 4318
+    targetPort: 4318
+  - name: metric-grpc
+    protocol: TCP
+    port: 4319
+    targetPort: 4319
+  type: LoadBalancer  # You can use NodePort or ClusterIP depending on your environment

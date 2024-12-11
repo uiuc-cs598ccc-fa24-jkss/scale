@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: modeler
+spec:
+  selector:
+    app: modeler
+  ports:
+  - protocol: TCP
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
+  type: {{ .Values.service.type }}    

@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: registration #Registration Service API
+  version: 0.1.0
+  description: API for managing user registration
+
+servers:
+  - url: /api/v1/registration
+    description: Registration Service Base URL
+
+paths:
+  /enroll:
+    post:
+      tags:
+      - registration
+      summary: Register User
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RegistrationRequest"
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TaskResponse"
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
+  /verify:
+    post:
+      tags:
+      - registration
+      summary: Verify Registration
+      operationId: verifyRegistration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CodeVerificationRequest"
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CodeVerificationResponse"
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
+  /health:
+    $ref: ../../paths/health/health.yaml                
+
+components:
+  schemas:
+    RegistrationRequest:
+      $ref: "../../components/schemas/RegistrationRequest.yaml"
+    CodeVerificationRequest:
+      $ref: "../../components/schemas/CodeVerificationRequest.yaml"
+    CodeVerificationResponse:
+      $ref: "../../components/schemas/CodeVerificationResponse.yaml"
+    TaskResponse:
+      $ref: "../../components/schemas/TaskResponse.yaml"
+    HTTPValidationError:
+      $ref: "../../components/schemas/HTTPValidationError.yaml"

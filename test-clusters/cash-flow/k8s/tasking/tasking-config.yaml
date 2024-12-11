@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tasking-config
+  namespace: cash-flow
+data:
+  DMS_API_URL: "http://dms:8080/internal/v1/data"
+  NOTIF_API_URL: "http://notification:8080/internal/v1/notification"

@@ -1,0 +1,6 @@
+# Jupyter and IPython dependencies
+jupyterlab==3.4.3
+notebook==6.4.12
+kubernetes
+pandas
+requests==2.31.0

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+data:
+  otel-collector-config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "{{ .Values.config.otlp_grpc_endpoint }}"
+          http:
+            cors:
+              allowed_origins:
+                - "http://*"  # living dangerously
+                - "https://*"  
+              allowed_headers:
+                - Content-Type          
+            endpoint: "{{ .Values.config.otlp_http_endpoint }}"
+    processors:
+      batch:
+    exporters:
+      debug:
+      otlp/tempo:
+        endpoint: "{{ .Values.config.tempo_endpoint }}"
+        tls:
+          insecure: true
+
+      otlp/sampler:
+        endpoint: "{{ .Values.sampler.endpoint }}"
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          initial_interval: {{ .Values.sampler.initial_interval }}
+          max_interval: {{ .Values.sampler.max_interval }}
+          max_elapsed_time: {{ .Values.sampler.max_elapsed_time }}
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp/tempo, otlp/sampler]

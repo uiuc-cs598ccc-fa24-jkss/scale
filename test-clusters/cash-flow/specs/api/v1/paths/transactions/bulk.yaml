@@ -1,0 +1,32 @@
+post:
+  tags:
+    - transactions
+  summary: Add Bulk Transactions
+  description: Add multiple transactions at once. Requires a valid JWT token.
+  operationId: post_api_transactions_bulk
+  requestBody:
+    content:
+      application/json:
+        schema:
+          items:
+            $ref: ../../components/schemas/TransactionBase.yaml
+          type: array
+          title: Transactions
+    required: true
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TaskResponse.yaml
+    '404':
+      description: Not found
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml
+  security:
+    - OAuth2PasswordBearer: []

@@ -1,0 +1,36 @@
+replicaCount: 1
+
+image:
+  repository: otel/opentelemetry-collector
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  grpcPort: 4317
+  httpPort: 4318
+
+  ports:
+    - protocol: TCP
+      name: grpc
+      port: 4317
+      targetPort: 4317
+    - protocol: TCP
+      name: http
+      port: 4318
+      targetPort: 4318
+
+config:
+  otlp_grpc_endpoint: "0.0.0.0:4317"
+  otlp_http_endpoint: "0.0.0.0:4318"
+  tempo_endpoint: "tempo:4317"
+  tlm_traces_endpoint: "tlm-service:4317"
+  tlm_metrics_endpoint: "tlm-service:4319"
+  retry_initial_interval: "5s"
+  retry_max_interval: "30s"
+  retry_max_elapsed_time: "300s"
+
+sampler:
+  endpoint: "sampler:4317"
+  initial_interval: "5s"
+  max_interval: "30s"
+  max_elapsed_time: "300s"

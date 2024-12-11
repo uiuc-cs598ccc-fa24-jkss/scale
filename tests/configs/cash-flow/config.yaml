@@ -1,0 +1,89 @@
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: auth-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-auth   # Target serviceName name for scaling
+    deploymentName: auth  # Target deployment name for scaling
+  latencyThreshold:
+    upperBound: 300ms  # Upper latency threshold to trigger scaling up
+    lowerBound: 100ms  # Lower latency threshold to trigger scaling down
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: celery-worker-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-celery-worker
+    deploymentName: celery-worker
+  latencyThreshold:
+    upperBound: 400ms
+    lowerBound: 150ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: dms-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-dms
+    deploymentName: dms
+  latencyThreshold:
+    upperBound: 250ms
+    lowerBound: 80ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: notification-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-notification
+    deploymentName: notification
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: registration-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-registration
+    deploymentName: registration
+  latencyThreshold:
+    upperBound: 351ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: tasking-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-tasking
+    deploymentName: tasking
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms
+
+---
+apiVersion: scale.autoscaling/v1
+kind: LatencyBasedAutoScaler
+metadata:
+  name: transaction-latency-scaler
+spec:
+  target:
+    serviceName: cash-flow-transaction  
+    deploymentName: transaction
+  latencyThreshold:
+    upperBound: 350ms
+    lowerBound: 120ms

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+  namespace: cash-flow
+data:
+  TASKING_API_URL: "http://tasking:8080/internal/v1/tasks"
+  USER_DB_HOST: "user-db"
+  USER_DB_PORT: "5432"
+  USER_DB_USER: "postgres"
+  USER_DB_DB: "user_data"
+  USER_DB_HOST_PORT: "5432"

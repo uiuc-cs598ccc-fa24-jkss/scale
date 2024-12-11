@@ -1,0 +1,53 @@
+global: 
+  clusterName: "otel-demo"
+
+sampler:
+  replicaCount: 1
+
+  samplerVersion: v2
+  trainSize: 1000
+
+  image:
+    repository: johndurkin/scale
+    name: "sampler"
+    version: "v1.0.9"
+    pullPolicy: Always
+
+  service:
+    port: 4317
+
+  resources:
+    limits:
+      memory: "2048Mi"
+      cpu: "1000m"
+
+modeler:
+  replicaCount: 1
+
+  traceSamplerChannel: "sampler:4317"
+
+  traceBackendUrl: "http://tempo:3200"
+
+  configSpecPath: "/app/config/specs"
+
+  configHostPath: "/mnt/config"  
+
+  targetNamespace: "default"
+
+  configDir: "otel-demo"
+
+  image:
+    repository: johndurkin/scale
+    name: "modeler"
+    version: "v1.0.6"
+    pullPolicy: Always
+
+  service:
+    type: NodePort
+    port: 4317
+    nodePort: 30555
+
+  resources:
+    limits:
+      memory: "512Mi"
+      cpu: "500m"

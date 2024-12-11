@@ -1,0 +1,72 @@
+post:
+  tags:
+    - transactions
+  summary: Create Transaction
+  description: |-
+    Create a new transaction. This triggers a background task.
+    Requires a valid JWT token.
+  operationId: post_api_transaction_create
+  security:
+    - OAuth2PasswordBearer: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/TransactionBase.yaml
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TaskResponse.yaml
+    '404':
+      description: Not found
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml
+get:
+  tags:
+    - transactions
+  summary: Read Transactions
+  description: Retrieve a list of transactions. Requires a valid JWT token.
+  operationId: get_api_transactions
+  security:
+    - OAuth2PasswordBearer: []
+  parameters:
+    - name: skip
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+        title: Skip
+    - name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        title: Limit
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/TransactionBase.yaml
+            title: Response Read Transactions Api Transactions  Get
+    '404':
+      description: Not found
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

@@ -1,0 +1,24 @@
+post:
+  tags:
+    - registration
+  summary: Register User
+  operationId: post_registration_enroll
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/RegistrationRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TaskResponse.yaml
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

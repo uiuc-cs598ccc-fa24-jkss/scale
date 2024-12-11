@@ -1,0 +1,36 @@
+post:
+  tags:
+    - auth
+  summary: Register User
+  description: |-
+    Register a new user.
+
+    Args:
+        user (schemas.UserCreate): The user data to be registered.
+        db (Session, optional): The database session. Defaults to Depends(get_db).
+
+    Returns:
+        schemas.User: The registered user data.
+
+    Raises:
+        HTTPException: If the username is already registered.
+  operationId: post_api_auth_register
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UserCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/User.yaml
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml

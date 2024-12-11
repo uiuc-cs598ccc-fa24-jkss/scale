@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-config
+  labels:
+    app: tempo
+data:
+  tempo.yaml: |
+    server:
+      http_listen_port: 3200
+      grpc_listen_port: 3201
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+    ingester:
+      max_block_duration: 30m
+    compactor:
+      compaction:
+        block_retention: 168h 
+    storage:
+      trace:
+        backend: local
+        wal:
+          path: /tmp/tempo/wal
+        local:
+          path: /tmp/tempo/traces

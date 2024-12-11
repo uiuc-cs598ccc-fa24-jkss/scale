@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: cash-flow
+  labels:
+    app: otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+        - name: otel-collector
+          image: otel/opentelemetry-collector-contrib:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4317 # gRPC port
+            - containerPort: 4318 # HTTP port
+          volumeMounts:
+            - name: otel-config-volume
+              mountPath: /etc/otel-collector/
+              subPath: otel-collector-config.yaml # Mount the config file
+      volumes:
+        - name: otel-config-volume
+          configMap:
+            name: otel-collector-config

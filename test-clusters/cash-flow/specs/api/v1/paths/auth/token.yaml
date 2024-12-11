@@ -1,0 +1,40 @@
+post:
+  tags:
+    - auth
+  summary: Login For Access Token
+  description: >-
+    Logs in a user and returns an access token.
+
+
+    Parameters:
+
+    - db (Session): The database session.
+
+    - form_data (OAuth2PasswordRequestForm): The form data containing the
+    username and password.
+
+
+    Returns:
+
+    - dict: A dictionary containing the access token and token type.
+  operationId: post_api_auth_token
+  requestBody:
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: >-
+            ../../components/schemas/Body_login_for_access_token_api_auth_token_post.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Token.yaml
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HTTPValidationError.yaml
