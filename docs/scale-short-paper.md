@@ -10,7 +10,7 @@ classoption:
 author: |
   ```{=latex}
   \author{
-  \IEEEauthorblockN{Kevin Mooney, John Durkin, Samson Koshy, Sushil Khadka, Reza Farivar, Tyler Gu}
+  \IEEEauthorblockN{Kevin Mooney, John Durkin, Samson Koshy, Sushil Khadka, Reza Farivar, Jiawei Tyler Gu}
   \vspace{0.2cm} % Adds vertical space between authors and affiliation
   \IEEEauthorblockA{University of Illinois at Urbana-Champaign, Urbana, IL, USA\\
   \texttt{\{}kmoone3, jdurkin3, skosh3, sushil2, farivar2, jiaweig3\texttt{\}}@illinois.edu}
@@ -40,9 +40,24 @@ abstract: |
 
 Whether running workloads on remote cloud platforms, on-premises clusters, or compute grids, proper resource utilization is one of the most significant factors that can affect operational expenses and capital expenditures. On one end of the spectrum, under-utilizing resources results in wasted costs through unused hardware and network allocation. Conversely, over-utilizing resources can negatively impact response times, causing degradation and failures throughout your application. At a minimum, this can frustrate the client base, while in severe cases, it can lead to detrimental production outages, potentially causing irreparable damage to the company or brand.
 
-While technologies exist to support dynamic load scaling to various degrees, current implementations have their limitations. Many focus directly on hardware resources such as CPU and memory. If CPU utilization exceeds a certain threshold, new instances of a computational unit will be created. Some systems delve deeper, relying on application-generated metrics. However, this involves keeping track of the right parts of your application, enabling scalers to correlate the appropriate application metrics to the right scaling actions.
+Existing technologies for dynamic load scaling are limited.
+<!-- While technologies exist to support dynamic load scaling to various degrees, current implementations have their limitations.  -->
+@whysolve22 focuses directly on hardware resources such as CPU and memory, 
+  where new instances will be created when CPU utilization exceeds a predefined threshold.
+Some systems delve deeper, relying on application-generated metrics. 
+However, this involves keeping track of the right parts of your application and manually connect the appropriate application metrics to the right scaling actions.
 
-We propose that there is significant innovation in a system that utilizes distributed tracing data to make intelligent decisions based on application performance, as opposed to simple metric-based autoscaling implementations. It should be designed in a way that is not dependent on any specific decision-making mechanism or orchestration technology. Instead, the implementation should provide abstraction around these two general areas. The system should focus on differentiating interesting from benign trace data. Such a design would allow research to concentrate on anomaly detection within trace data, enabling operators to customize scaling for diverse and heterogeneous architectures. Through our research, we will advocate for SCALE, a system emphasizing the sampling of distributed tracing for anomalous execution durations. In cases where anomalies are detected, the processor will generate scaling signals based on the analysis of tail latencies of individual calls within those graphs.
+We propose SCALE, a novel technique utilizing distributed tracing data to make 
+  scaling decisions based on application performance, 
+  as opposed to solely relying on simple metrics. 
+SCALE does not depend on a specific decision-making mechanism or 
+  orchestration technology;
+  instead, 
+  it provides abstraction around these two general areas and focuses on differentiating interesting from benign trace data. 
+Such a design would allow research to concentrate on anomaly detection within trace data, enabling operators to customize scaling for diverse and heterogeneous architectures. 
+SCALE emphasizes on the sampling of distributed tracing for anomalous execution durations. 
+In cases where anomalies are detected, 
+  the SCALE processor will generate scaling signals based on the analysis of tail latencies of individual calls within those graphs.
 
 # II Background & Characterization
 
