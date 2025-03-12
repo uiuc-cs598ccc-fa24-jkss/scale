@@ -193,6 +193,7 @@ We then take the difference of the end timestamp minus start timestamp and scale
 ```{=latex}
 \vspace{-1em}
 \begin{table}[H]
+  \footnotesize
   \caption{Sampler Parameters}
   \begin{tabularx}{\columnwidth}{l|p{5.5cm}}
     \hline
@@ -325,6 +326,7 @@ The optimized sampler was evaluated against two datasets used in previous studie
   % Reduce spacing for captions and floats
   
   \begin{table}[H]
+    \footnotesize
     \caption{Dataset Comparison}%
     \begin{tabularx}{\columnwidth}{l|X|X}
       \hline
