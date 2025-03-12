@@ -64,37 +64,45 @@ In cases where anomalies are detected,
 ## A. Related Works
 
 In our research, we drew particular motivation from gaps in the current state of the art of autoscaling systems pointed out
-by our fellow researchers.  Much of this fell in line with our vision, and helped reinforce the direction we took in our
-own implementation.
+by our fellow researchers.
 
 ### 1) Autoscaling
 
 Straesser et al. @whysolve22 argue that state-of-the-art autoscalers are often too complex for production and rely heavily on CPU metrics. However, performance for some applications is not driven by CPU or memory, making a combination of platform and application metrics beneficial. However, there is also a lack of general-purpose autoscalers for these needs.
 
-Eder et al. @comdist23 emphasize the importance of considering deployment costs in pay-per-use models and ensuring distributed tracing does not degrade application performance. They found that the performance impact—measured in runtime, memory usage, and initialization—varies with tools like Zipkin @zipkin24, Otel @otel24, and SkyWalking @skywalking24. They conclude that with proper tool selection, the benefits of distributed tracing can outweigh performance downsides.
+Eder et al. @comdist23 focus on deployment costs in pay-per-use models and ensuring distributed tracing not to degrade application performance. 
+They found that the performance impact—measured in runtime, memory usage, and initialization—varies with tools like Zipkin @zipkin24, Otel @otel24, and SkyWalking @skywalking24. They conclude that with proper tool selection, the benefits of distributed tracing can outweigh performance downsides.
 
-Yu et al. @microscaler19 proposed MicroScaler, which identifies services needing scaling to meet SLA requirements by collecting service metrics (QoS, latency) through proxy sidecars in microservice architectures. While novel, it bases scaling solely on latency and introduces sidecar overheads.
+Yu et al. @microscaler19 proposed MicroScaler, which identifies services needing scaling to meet SLA requirements by collecting service metrics (QoS, latency) through proxy sidecars in microservice architectures. 
+It bases scaling solely on latency and introduces sidecar overheads.
 
 ### 2) Sampling
 
 Modern distributed applications are complex, needing deep insights into request orchestration across services. Distributed tracing provides this view but can generate terabytes of trace data daily, complicating processing and storage. Sampling helps maintain efficiency while managing data overload.
 
 The common strategy used by tools like Jaeger @jaeger24 and Zipkin @zipkin24 is uniform random sampling, or head-based sampling, where decisions are made at a trace's start. This method often captures redundant traces, limiting anomaly detection value.
-
-To improve this, tail-based sampling defers decisions until a trace is complete, focusing on traces likely to be informative or anomalous. It is widely adopted in academia and industry. For instance, Tracemesh @tracemesh24 uses DenStream @denstream06 for clustering streaming data, sampling traces
-based on their evolving characteristics to cut back on oversampling. Sieve @sieve21 applies a biased sampling method using attention scores with Robust Random Cut Forests (RRCF) to identify uncommon traces. Both leverage trace structural and temporal variations to boost sampling effectiveness. Sifter @sifter19 prioritizes diverse traces by weighting sampling decisions towards those that are underrepresented in its model, thus improving trace variety. Las-Casas et al. @weighted18 proposed a weighted sampling method using a hierarchical clustering technique called Purity Enhancing Rotations for Cluster Hierarchies (PERCH) to ensure diversity in selected traces.
+To improve this, tail-based sampling defers decisions until a trace is complete, focusing on traces likely to be informative or anomalous. For instance, Tracemesh @tracemesh24 uses DenStream @denstream06 for clustering streaming data, sampling traces
+based on their evolving characteristics to cut back on oversampling. 
+Sieve @sieve21 applies a biased sampling method using attention scores with Robust Random Cut Forests (RRCF) to identify uncommon traces. 
+Both leverage trace structural and temporal variations to boost sampling effectiveness. Sifter @sifter19 prioritizes diverse traces by weighting sampling decisions towards those that are underrepresented in its model, thus improving trace variety. Las-Casas et al. @weighted18 proposed a weighted sampling method using a hierarchical clustering technique called Purity Enhancing Rotations for Cluster Hierarchies (PERCH) to ensure diversity in selected traces.
 
 ## B. Human Insight vs. Machine Learning
 
-When surveying the landscape of current autoscaling systems, one significant choice that arises is whether to take a heuristics-based approach or to use a fully automated approach. Many original scaling systems were based on heuristics. It is, of course, easier to implement a simple rules-based parser than to design a fully automated system. This allows you to leverage common domain knowledge and directly apply scaling semantics that you believe best serve the health of your system. However, this approach has some obvious drawbacks. The most notable issue is the constant need for human intervention. You will undoubtedly spend well-focused man-hours devising your scaling rule set, and then whatever time it takes to put pen to paper. This is also not a one-time cost. As your system evolves due to planned architecture changes or unforeseen circumstances, you will continuously need to rework your scaling model. Beyond the manual overhead that this approach entails, there’s the fact that humans are not infallible; any scheme they devise, while hopefully sound, is unlikely to be fully optimal.
+Existing autoscaling systems need to make a design choice between adopting a rule-based approach or fully automated approach. 
+Rule-based solutions are simpler than fully automated approaches,
+  relying on human operators to encode the rules.
+However, they are also harder to maintain, requiring human intervention from time to time. 
+Rule-based solutions are also prone to human mistakes.
 
 # III Design
 
 ## A. Overview
 
-We introduce SCALE, a software system which analyzes various system and application generated
-observability data in order to perform dynamic scaling of application work loads in cloud hosted and/or on-premises environments.
-We envision a monitor that can make use of open technologies to probe distributed tracing and metric data.  This system would wire up to client APIs of a diverse set of process orchestration software. This can include container orchestrators, serverless function controllers or VM provisioning frameworks amongst others.  Based on processing of the observability data, a processor will make
+We introduce SCALE, a software system which analyzes application generated
+  observability data to perform dynamic scaling of application work loads in cloud environments.
+We envision a monitor that can make use of open technologies to probe distributed tracing and metric data. 
+This system would wire up to client APIs of a diverse set of process orchestration software. This can include container orchestrators, serverless function controllers or VM provisioning frameworks amongst others.  
+Based on processing of the observability data, a processor will make
 vertical or horizontal scaling decisions.  These decisions will then be communicated to the orchestration systems via their 
 client API to carry out the scaling action.
 
